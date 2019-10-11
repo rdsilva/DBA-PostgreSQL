@@ -1,0 +1,27 @@
+#!/bin/bash
+
+# This script creates an individual backup to each database from a postgres cluster
+# Credit: Rodrigo Silva - https://github.com/rdsilva
+
+exec &>> /home/postgres/bkp-logs.txt
+
+export PATH=/etc/go/bin:$PATH
+
+filepath="/opt/TempBKPS"
+date=`date +%Y-%m-%d`
+
+for dbase in `psql -h localhost -U postgres -qAt -c "SELECT datname FROM pg_database WHERE datistemplate = false;"`;
+do
+    mkdir "$filepath/$dbase/"
+    cd "$filepath/$dbase/"
+    file="${dbase}_${date}.bkp"
+    echo $file
+    pg_dump -h localhost -U postgres -d $dbase -x -O > $file;
+done
+
+# SINCRONIZANDO TODOS OS DOCUMENTOS COM O GDRIVE
+cd $filepath
+gdrive sync upload . 1f2kWfWBFrxzSWwUMo0j-l-wSylXTajNp
+
+# REMOVENDO TODOS OS ARQUIVOS COM +7 DIAS DE VIDA
+find . -name \*.bkp -type f -mtime +7 -delete
