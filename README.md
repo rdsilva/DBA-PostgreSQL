@@ -1,8 +1,10 @@
 # Infraestrutura de Bancos de Dados
+
 > Laboratório de Inovação Tecnológica em Saúde - LAIS
+
 > Núcleo Avançado de Inovação Tecnológica - NAVI
 
-> **Versão 2018.01.22**
+> **Versão 2019.10.11**
 
 Os scripts contidos neste projeto tem por objetivo automatizar o uso dos bancos de dados pela equipe de Infraestrutura e Banco de Dados. Desta forma, abaixo estarão listados os scripts existentes e a forma como utilizá-los.
 
@@ -45,3 +47,41 @@ Esta sequência de passos automatiza a criação do novo banco e usuário, bem c
 
 Alterar o caminho da variável do PG_HBA manualmente para corresponder com a sua instância do PostgreSQL em uso.
 
+## AlterOwner
+
+### Geral
+
+Este script permite, de forma ágil e prática, alterar o Owner de um banco em todas as instâncias devidas.
+
+### Como usar
+
+- Dê as devidas permissões para o script
+- Execute-o com o usuário que tem permissão geral no banco, como por exemplo o usuário `postgres`
+- Defina a flag `-d NOME_DO_BANCO`
+- Defina a flag `-o NOVO_OWNER`
+
+`./alter_owner.sh -d meu_banco -o novo_owner`
+
+
+## ListAll
+
+### Geral
+
+Este script gera uma lista completa do seu cluster de bancos, listando a relação **banco de dados**, **schema**, **tabela**.
+Resumindo, irá listar todas as tabelas, de todos os esquemas de todos os bancos.
+
+Se você administra um cluster com muitos bancos, que por sua vez possuem muitas tabelas, sugiro você dá a saída do comando para um arquivo.
+
+`./listAll.sh >> arquivo.txt`
+
+## bkp_allAlone
+
+### Geral
+
+O objetivo deste script é realizar um dump de todos os bancos contidos no meu cluster e salvá-los no [GDrive](https://github.com/gdrive-org/gdrive/blob/master/README.md).  
+O script faz um select no banco para listar todos os bancos, percorré
+ a lista gerando um dump no do banco no padrã
+o `
+NOME_BANCO_DATA.bkp`
+ salvando em uma pasta temporár
+ia. Depois de gerar o dump de todos os bancos, o script sincroniza a pasta local com a pasta no GDrive. Por fim o script remove todos os dumps com mais de 7 dias de vida.
