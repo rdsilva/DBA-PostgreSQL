@@ -14,9 +14,9 @@ for dbase in `psql -h localhost -U postgres -qAt -c "SELECT datname FROM pg_data
 do
     mkdir "$filepath/$dbase/"
     cd "$filepath/$dbase/"
-    file="${dbase}_${date}.bkp"
+    file="${dbase}_${date}.bkp.gz"
     echo $file
-    pg_dump -h localhost -U postgres -d $dbase -x -O > $file;
+    pg_dump -h localhost -U postgres -d $dbase -x -O | gzip -9 > $file;
 done
 
 # SINCRONIZANDO TODOS OS DOCUMENTOS COM O GDRIVE
@@ -24,4 +24,4 @@ cd $filepath
 gdrive sync upload . 1f2kWfWBFrxzSWwUMo0j-l-wSylXTajNp
 
 # REMOVENDO TODOS OS ARQUIVOS COM +7 DIAS DE VIDA
-find . -name \*.bkp -type f -mtime +7 -delete
+find . -name \*.bkp.gz -type f -mtime +7 -delete
