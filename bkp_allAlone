@@ -25,3 +25,6 @@ gdrive sync upload . 1f2kWfWBFrxzSWwUMo0j-l-wSylXTajNp
 
 # REMOVENDO TODOS OS ARQUIVOS COM +7 DIAS DE VIDA
 find . -name \*.bkp.gz -type f -mtime +7 -delete
+
+# REMOVENDO OS ARQUIVOS DO GDRIVE
+sh ./delete_old_gdrive.sh
